@@ -26,7 +26,7 @@ const Calc = (props) => {
                 disabled={props.total === 0 ? 'disabled' : ''}
                 >
                     -
-            </button>
+            </button>12
             <button
                 onClick={()=>{props.deleteBtn(props.id)}} 
                 style={style} 
