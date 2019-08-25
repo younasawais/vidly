@@ -1,8 +1,8 @@
-import React        from 'react';
-import {getMovies}  from './db/fakeMovieService';
-import {getGenres}  from './db/fakeGenreService';
-import Pagination   from './comps/pagination.js';
-import Genres       from './comps/genres.js';
+import React           from 'react';
+import {getMovies}     from './db/fakeMovieService';
+import {getGenres}     from './db/fakeGenreService';
+import Nav             from './comps/nav.js';
+import {BrowserRouter} from 'react-router-dom';
 
 class App extends React.Component{
   constructor(props){
@@ -14,24 +14,30 @@ class App extends React.Component{
     
     let genres = getGenres();
     this.state = {
-      movies : getMovies(),
-      maxPerPage : 5,
+      movies        : getMovies(),
+      maxPerPage    : 5,
       displayMovies : getMovies(),
-      initiate : true,
-      genres : genres 
+      initiate      : true,
+      genres        : genres,
+      currentPage   : 1 
     }
   }
 
   handleGenre(genre){
     let allMovies       = this.state.movies;
     let filteredMovies  = [];
-
-    for (let i = 0; i < allMovies.length; i++) {
+    if (genre !== "All") {
+      for (let i = 0; i < allMovies.length; i++) {
         if (allMovies[i].genre.name === genre) {
           filteredMovies.push(allMovies[i]);
         }
+      }
+    }else{
+      for (let i = 0; i < allMovies.length; i++) {
+          filteredMovies.push(allMovies[i]);
+      }
     }
-    console.log(filteredMovies);
+
     this.setState({
       displayMovies : filteredMovies
     })
@@ -39,46 +45,20 @@ class App extends React.Component{
 
   render(){
     return(
-      <div> 
-        <h2>Showing {this.state.displayMovies.length} movies in the DB</h2>
-        <table className="table">
-          <thead>
-            <tr>
-              <th scope="col">Title</th>
-              <th scope="col">Genre</th>
-              <th scope="col">Stock</th>
-              <th scope="col">Ratee</th> 
-            </tr>
-          </thead>
-          <tbody>
-            {this.state.displayMovies.map((movie) => 
-              <tr key={movie._id}>
-                <td>{movie.title}</td>
-                <td>{movie.genre.name}</td>
-                <td>{movie.numberInStock}</td>
-                <td>{movie.dailyRentalRate}</td>
-                <td onClick={()=>{this.handleLike(movie._id)}}><i 
-                    className={movie.liked ? 'fa fa-heart-o' : 'fa fa-heart' }
-                    aria-hidden={movie.liked ? "true" : "false" }></i>
-                </td>
-                <td>
-                  <button 
-                    onClick={()=>{this.onClickdeleteMovie(movie._id)}} 
-                    className="btn btn-primary">Delete
-                  </button>
-                </td>
-              </tr>)}
-          </tbody>
-        </table>
-        <Pagination 
-          totalMovies={this.state.movies.length} 
-          maxPerPage={this.state.maxPerPage} 
-          handleShowMovies={this.handleShowMovies}
-        />
-        <Genres 
-          genres={this.state.genres} 
-          handleGenre={this.handleGenre}/>
-      </div>
+      <React.Fragment>
+        <BrowserRouter>
+          <Nav 
+            genres={this.state.genres} 
+            handleGenre={this.handleGenre}
+            displayMovies={this.state.displayMovies}
+            handleLike={this.handleLike}
+            onClickdeleteMovie={this.onClickdeleteMovie}
+            totalMovies={this.state.movies.length} 
+            maxPerPage={this.state.maxPerPage} 
+            handleShowMovies={this.handleShowMovies}
+          />
+        </BrowserRouter>
+      </React.Fragment>
     )
   }
 
@@ -96,7 +76,8 @@ class App extends React.Component{
     }
     this.setState({
       displayMovies : displayMovies,
-      initiate : false
+      initiate : false,
+      currentPage : btnNr
     })
   }
   
@@ -115,6 +96,7 @@ class App extends React.Component{
     this.setState({
       movies : movies
     });
+    this.handleShowMovies(this.state.currentPage);
   }
 
   handleLike(id){
