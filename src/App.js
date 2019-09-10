@@ -3,6 +3,7 @@ import {getMovies}     from './db/fakeMovieService';
 import {getGenres}     from './db/fakeGenreService';
 import Nav             from './comps/nav.js';
 import {BrowserRouter} from 'react-router-dom';
+import Joi             from 'joi-browser';
 
 class App extends React.Component{
   constructor(props){
@@ -11,6 +12,8 @@ class App extends React.Component{
     this.handleShowMovies   = this.handleShowMovies.bind(this);
     this.handleLike         = this.handleLike.bind(this);
     this.handleGenre        = this.handleGenre.bind(this);
+    this.handleRegisterForm = this.handleRegisterForm.bind(this);
+    this.handleSubmit       = this.handleSubmit.bind(this);
     
     let genres = getGenres();
     this.state = {
@@ -19,7 +22,8 @@ class App extends React.Component{
       displayMovies : getMovies(),
       initiate      : true,
       genres        : genres,
-      currentPage   : 1 
+      currentPage   : 1,
+      account       : {username : "", password : "", name : "", result : ""}
     }
   }
 
@@ -48,20 +52,54 @@ class App extends React.Component{
       <React.Fragment>
         <BrowserRouter>
           <Nav 
-            genres={this.state.genres} 
-            handleGenre={this.handleGenre}
-            displayMovies={this.state.displayMovies}
-            handleLike={this.handleLike}
-            onClickdeleteMovie={this.onClickdeleteMovie}
-            totalMovies={this.state.movies.length} 
-            maxPerPage={this.state.maxPerPage} 
-            handleShowMovies={this.handleShowMovies}
+            genres              = {this.state.genres} 
+            handleGenre         = {this.handleGenre}
+            displayMovies       = {this.state.displayMovies}
+            handleLike          = {this.handleLike}
+            onClickdeleteMovie  = {this.onClickdeleteMovie}
+            totalMovies         = {this.state.movies.length}
+            maxPerPage          = {this.state.maxPerPage} 
+            handleShowMovies    = {this.handleShowMovies}
+            handleRegisterForm  = {this.handleRegisterForm}
+            handleSubmit        = {this.handleSubmit}
+            account             = {this.state.account}
           />
         </BrowserRouter>
       </React.Fragment>
     )
   }
 
+
+
+
+  handleRegisterForm(e){
+    let value         = e.currentTarget.value;
+    let name          = e.currentTarget.name;
+    let account       = this.state.account;
+    account[name]     = value;
+    this.setState({
+      account : account
+    })
+  }
+
+  handleSubmit(e){
+    e.preventDefault();
+    const schema = Joi.object().keys({
+      username : Joi.string().min(3).max(255).required(),
+      password : Joi.string().min(3).max(255).required(),
+      name     : Joi.string().min(3).max(255).required()
+    });
+    let { name, password, username} = this.state.account;
+    const result = schema.validate({ username: username, password: password , name: name});
+    let account = this.state.account;
+    if(result.error === null){
+      account["result"] = `name is ${name}, username is ${username} and password is ${password}`;
+      this.setState({account : account});
+    }else{
+      account["result"] = `Something wend wrong`;
+      this.setState({account : account});
+    }
+  }
 
 
   handleShowMovies(btnNr){
