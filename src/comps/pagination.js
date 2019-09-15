@@ -8,14 +8,15 @@ const Pagination = (props) => {
     for (let i = 0; i < pages; i++) {
         pagesArr.push(i+1);    
     }
-    return ( // eslint-disable-next-line
+    return (
         <nav aria-label="Page navigation example">
             <ul className="pagination">
                 {
                     pagesArr.map((li)=>(
                     <li key={li} 
                         className="page-item"
-                        onClick={()=>{handleShowMovies(li)}}>
+                        onClick={()=>{handleShowMovies(li)}}> 
+                        {/*eslint-disable-next-line */}
                             <a className="page-link" >{li}</a>
                     </li>))
                 }

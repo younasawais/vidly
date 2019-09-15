@@ -4,9 +4,10 @@ import MoviesPage                           from "../pages/MoviesPage";
 import RentalsPage                          from "../pages/RentalsPage";
 import CustomersPage                        from "../pages/CustomersPage";
 import NotFoundPage                         from "../pages/notFoundPage";
-import SingleMoviePage                      from "../pages/singleMoviePage";
+//import SingleMoviePage                      from "../pages/singleMoviePage";
 import LoginPage                            from "../pages/loginPage";
 import RegisterPage                         from "../pages/RegisterPage.jsx";
+import AddMoviePage                         from "../pages/addMoviePage.jsx";
 
 
 const Nav = (props) => {
@@ -19,42 +20,48 @@ const Nav = (props) => {
                 <NavLink className="nav-link nav-item" to="/login">Login</NavLink>
                 <NavLink className="nav-link nav-item" to="/register">Register</NavLink>
             </nav>
-            <Switch>
+            <Switch>      
                 <Route 
-                    path="/movies" 
+                    exact path="/movies/new"
+                    render={()=><AddMoviePage {...props}/>}
+                /> 
+                <Route 
+                    exact path="/movies" 
                     render={()=><MoviesPage {...props}/>}
                 />
-                <Route 
-                    path="/rentals" 
+                <Route   
+                    exact path="/rentals" 
                     render={()=><RentalsPage {...props}/>}
                 />
                 <Route 
-                    path="/customers" 
+                    exact path="/customers" 
                     render={()=><CustomersPage {...props}/>}
                 />
                 <Route 
-                    path="/notfound" 
+                    exact path="/notfound" 
                     render={()=><NotFoundPage {...props}/>}
                 /> 
                 <Route 
-                    path="/singleMoviePage/:id" 
-                    component={SingleMoviePage}
+                    exact path="/singleMoviePage/:id" 
+                    render={({ 
+                        location, 
+                        match 
+                    }) =><AddMoviePage {...props} match={match}/>}
                 /> 
                 <Route 
-                    path="/login/" 
+                    exact path="/login/" 
                     component={LoginPage}
                 />   
                 <Route 
-                    path="/register/" 
-                    exact render={()=><RegisterPage {...props}/>}
-                />              
+                    exact path="/register/" 
+                    render={()=><RegisterPage {...props}/>}
+                />        
                 <Route 
-                    path="/" 
-                    exact render={()=><MoviesPage {...props}/>}
+                    exact path="/" 
+                    render={()=><MoviesPage {...props}/>}
                 />
                 <Redirect to="/notfound"/>
             </Switch>
-
         </nav>
      );
 }
