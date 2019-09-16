@@ -4,7 +4,6 @@ import MoviesPage                           from "../pages/MoviesPage";
 import RentalsPage                          from "../pages/RentalsPage";
 import CustomersPage                        from "../pages/CustomersPage";
 import NotFoundPage                         from "../pages/notFoundPage";
-//import SingleMoviePage                      from "../pages/singleMoviePage";
 import LoginPage                            from "../pages/loginPage";
 import RegisterPage                         from "../pages/RegisterPage.jsx";
 import AddMoviePage                         from "../pages/addMoviePage.jsx";

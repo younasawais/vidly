@@ -18,7 +18,8 @@ const Movies = (props) => {
         <tbody>
           {displayMovies.map((movie) => 
           <tr key={movie._id}>
-            <td><Link to={'/singleMoviePage/' + movie._id} >{movie.title}</Link></td>
+            <td><Link to={'/singleMoviePage/' + movie._id} >{movie.title}</Link>
+            </td>
             <td>{movie.genre.name}</td>
             <td>{movie.numberInStock}</td>
             <td>{movie.dailyRentalRate}</td>

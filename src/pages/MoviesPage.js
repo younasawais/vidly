@@ -7,7 +7,8 @@ import {Link}                               from 'react-router-dom';
 
 const MoviesPage = (props) => {
     const {displayMovies, genres, handleGenre,   
-        handleLike, onClickdeleteMovie, totalMovies, maxPerPage, handleShowMovies } = props;
+           handleLike, onClickdeleteMovie, totalMovies, 
+           maxPerPage, handleShowMovies, searchBox, handleSearch } = props;
     return ( 
         <React.Fragment>
             <div className="container">
@@ -16,8 +17,16 @@ const MoviesPage = (props) => {
                         genres={genres} 
                         handleGenre={handleGenre}/>
                     <div className="col-lg-9">
-                        <Link  type="button" className="btn btn-primary" to="/movies/new">New Movie</Link>
+                        <Link  type="button" className="btn btn-primary" to="/movies/new">
+                            New Movie</Link>
                         <MoviesCount displayMovies={displayMovies}/>
+                        <input  type="text" 
+                                className="form-control" 
+                                id="search" 
+                                placeholder="Search" 
+                                onChange={handleSearch}
+                                name="searchBox"
+                                value={searchBox}/>
                         <Movies 
                             displayMovies={displayMovies}
                             handleLike={handleLike}
